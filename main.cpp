@@ -3,23 +3,77 @@
 
 
 class Organism {
-  public:
+public:
     double behavior;
 
-    // a constructor that takes a double and sets the instance variable.
     Organism(double b) : behavior(b) { }
 
+    Organism* reproduce(emp::Random thing) {
+        Organism* child = new Organism(behavior);
+        child->mutate(thing);
+        return child;
+    }
+
+    double getBehavior() const {
+        return behavior;
+    }
+
+    void mutate(emp::Random random) {  
+        double number = random.GetRandNormal(0.0, 0.02);
+        behavior += number;
+    }
 };
 
 int main() {
-
+    emp::Random random(1);
     emp::vector<Organism> population;
 
-    double b = emp::Random random(1);
-
     for (int i = 0; i < 100; i++) {
-      population.push_back(Organism(b));
-      cout << "Organism " << i << " behavior: " << population[i].behavior << std::endl;
+        double b = random.GetDouble(0, 1);
+        population.push_back(Organism(b));
+        // std::cout << "Organism " << i << " behavior: " << population[i].behavior << std::endl;
     }
 
+    Organism parent = population[0];
+
+    Organism child = *parent.reproduce(random);
+
+    std::cout << "Parent behavior: " << parent.behavior << std::endl;   
+    std::cout << "Child behavior: " << child.behavior << std::endl;
+
+    // Updates from exercise 3
+    double highest_behavior = 0.0;
+    Organism highest_organism = population[0];
+    for (int k = 0; k < 10000; k++) {
+        for (Organism j : population){
+            // Gets organism with highest numerical behavior
+            double current_behavior = j.getBehavior();
+            if (current_behavior > highest_behavior) {
+                std::cout << "New highest behavior achieved: " << current_behavior << std::endl;
+                highest_behavior = current_behavior;
+                // Declare a variable to hold the highest behavior
+                highest_organism = j;
+            }
+        }
+    }   
+
+    // Reproduce with it and save the child
+    Organism child_organism = *highest_organism.reproduce(random);
+    std::cout << "Original score of first org:" << population[0].getBehavior() << std::endl;
+
+    // Replace the first organism in the population with the child
+    population[0] = child_organism;
+    std::cout << "New score of first org:" << population[0].getBehavior() << std::endl;
+
+    std::cout << "Size of population: " << population.size() << std::endl;
+
+
+    // Probably start exercise 4 around here
+    
+
+    
+
+
+
+    return 0;
 }
