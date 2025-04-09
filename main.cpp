@@ -44,6 +44,7 @@ int main() {
     // Updates from exercise 3
     double highest_behavior = 0.0;
     Organism highest_organism = population[0];
+    
     for (int k = 0; k < 10000; k++) {
         for (Organism j : population){
             // Gets organism with highest numerical behavior
@@ -53,27 +54,24 @@ int main() {
                 highest_behavior = current_behavior;
                 // Declare a variable to hold the highest behavior
                 highest_organism = j;
+                
             }
         }
     }   
 
+    int overwrite = random.GetUInt(0,100);
+
     // Reproduce with it and save the child
     Organism child_organism = *highest_organism.reproduce(random);
-    std::cout << "Original score of first org:" << population[0].getBehavior() << std::endl;
+    std::cout << "Original score of org:" << population[overwrite].getBehavior() << std::endl;
 
-    // Replace the first organism in the population with the child
-    population[0] = child_organism;
-    std::cout << "New score of first org:" << population[0].getBehavior() << std::endl;
+    // Replace a random organism in the population with the child
+    
+    population[overwrite] = child_organism;
+
+    std::cout << "New score of org:" << population[0].getBehavior() << std::endl;
 
     std::cout << "Size of population: " << population.size() << std::endl;
-
-
-    // Probably start exercise 4 around here
-    
-
-    
-
-
 
     return 0;
 }
